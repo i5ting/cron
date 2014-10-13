@@ -4,11 +4,21 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var model = require('./db/models');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var stackman = require('stackman')();
 
 var app = express();
+
+// mongoose config
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/qbase_cron');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'mongoose connection error:'));
+db.once('open', function callback () {
+  // yay!
+	console.log('mongoose open success');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,8 +32,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Make our db accessible to our router
+app.use(function(req,res,next){
+    req.db = mongoose;
+		req.model = require('./db/models');
+    next();
+});
+
+var routes = require('./routes/index');
+var users = require('./routes/users');
+var tokens = require('./routes/v0.1.0/tokens');
+
+
 app.use('/', routes);
 app.use('/users', users);
+
+app.use('/api/v0.1.0/tokens', tokens);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
