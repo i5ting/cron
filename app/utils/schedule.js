@@ -1,16 +1,26 @@
-var redis = require("redis"),
+var redis = require("redis");
 
 // create a client to subscribe to the notifications
-subscriberClient = redis.createClient(),
+var subscriberClient = redis.createClient();
 
 // create a client which adds to the scheduled queue
-schedQueueClient = redis.createClient();
+var schedQueueClient = redis.createClient();
+
+var request = require('request');
 
 // when a published message is received...
 subscriberClient.on("pmessage", function (pattern, channel, expiredKey) {
     console.log("Task triggerd : key ["+  expiredKey +"] has expired");
     //TODO: push expiredKey onto some other list to proceed to order fulfillment
 
+		var url = "http://127.0.0.1:7000/api/v0.1.0/tasks/" + expiredKey + "/request/send" 
+		console.log(url);
+		
+		request(url, function (error, response, body) {
+		  if (!error && response.statusCode == 200) {
+		    console.log(expiredKey + '---' + url + "发送请求成功" + body) // Print the google web page.
+		  }
+		})
     // subscriberClient.quit();
 });
 

@@ -17,8 +17,8 @@ var taskSchema = Schema({
   time: String,
 	desc: String,
 	callback_url: String,
+	callback_param: String,
 	is_finished : Number,
-	data				: String,
 	create_at   : { type: Date, default: Date.now }
 });
 
