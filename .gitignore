@@ -1,6 +1,7 @@
 # Logs
 logs
-*.log
+app/*.log
+app/*.log*
 
 # Runtime data
 pids
