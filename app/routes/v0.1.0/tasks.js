@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var msgpack = require('msgpack');
+
+// var b = msgpack.pack(o);
+// var oo = msgpack.unpack(b);
 
 /* GET token create. */
 router.post('/', function(req, res) {
@@ -11,28 +15,34 @@ router.post('/', function(req, res) {
 	console.log(req.query);
 	
 
-		//
+	//
 	// - _id
 	// - time
 	// - desc
 	// - callback_url
 	// - is_finished
 	// - create_at
-	var time		 	= req.body.time;
-	var desc			= req.body.desc;
+	var time		 					= req.body.time;
+	var desc							= req.body.desc;
 	var callback_url 			= req.body.callback_url;
-	var is_finished 	= 0
+	var is_finished 			= 0;
+	var data 							= req.body.data;
 	
 	if(req.body.is_finished && req.body.is_finished != 0){
 		is_finished = req.body.is_finished;
 	}
 	//
+	
+	var str = msgpack.pack(data)
+	
+	console.log(data + 'str = '+ str)
 		
 	var new_task = new model.TaskModel({
-		time: time ,
-		desc: desc,
+		time				: time ,
+		desc				: desc,
 		callback_url: callback_url,
-		is_finished: is_finished
+		is_finished : is_finished,
+		data 				: data
 	});
 
 	new_task.save(function (err, new_task) {

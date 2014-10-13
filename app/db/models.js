@@ -17,8 +17,9 @@ var taskSchema = Schema({
   time: String,
 	desc: String,
 	callback_url: String,
-	is_finished: Number,
-	create_at  :  { type: Date, default: Date.now }
+	is_finished : Number,
+	data				: String,
+	create_at   : { type: Date, default: Date.now }
 });
 
 var TaskModel = mongoose.model('TaskModel', taskSchema)
