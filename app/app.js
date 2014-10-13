@@ -6,6 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var model = require('./db/models');
 
+var schedule = require('./utils/schedule');
+
+
+
 var stackman = require('stackman')();
 
 var app = express();
@@ -36,18 +40,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
     req.db = mongoose;
 		req.model = require('./db/models');
+		req.scheduleManager = schedule.Manager
     next();
 });
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var tokens = require('./routes/v0.1.0/tokens');
+var tasks = require('./routes/v0.1.0/tasks');
 
 
 app.use('/', routes);
 app.use('/users', users);
 
 app.use('/api/v0.1.0/tokens', tokens);
+app.use('/api/v0.1.0/tasks', tasks);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,8 +1,27 @@
+
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
+/** task
+- id（uuid）
+- time时间
+- desc描述
+- callback_url
+- is_finished
+- create_at  :  { type: Date, default: Date.now }
+*/
+
+var taskSchema = Schema({
+  time: String,
+	desc: String,
+	callback_url: String,
+	is_finished: Number,
+	create_at  :  { type: Date, default: Date.now }
+});
+
+var TaskModel = mongoose.model('TaskModel', taskSchema)
 
 var tokenSchema = Schema({
   app: String,
@@ -55,5 +74,6 @@ var TokenModel = mongoose.model('TokenModel', tokenSchema)
 // var checkInInfo=mongoose.model('checkInOut',checkInInfoSchema);
 
 module.exports = {
- 	TokenModel:TokenModel
+ 	TokenModel:TokenModel,
+	TaskModel :TaskModel
 }
