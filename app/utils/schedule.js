@@ -16,6 +16,7 @@ subscriberClient.on("pmessage", function (pattern, channel, expiredKey) {
 		var url = "http://127.0.0.1:7000/api/v0.1.0/tasks/" + expiredKey + "/request/send" 
 		console.log(url);
 		
+		//TODO: 此处可以改成事件方式
 		request(url, function (error, response, body) {
 		  if (!error && response.statusCode == 200) {
 		    console.log(expiredKey + '---' + url + "发送请求成功" + body) // Print the google web page.

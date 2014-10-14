@@ -41,7 +41,8 @@ router.post('/', function(req, res) {
 		desc				: desc,
 		callback_url: callback_url,
 		is_finished : is_finished,
-		callback_param: str
+		is_stop 		: 0,
+		callback_param: callback_param
 	});
 
 	new_task.save(function (err, new_task) {
@@ -105,18 +106,27 @@ router.get('/:id/request/send', function(req, res) {
 	model.TaskModel.findOne({ '_id': _id }, 'time desc callback_url callback_param', function (err, task) {
 	  if (err) return handleError(err);
 		
-		console.log(task);
+		console.log("已经找到对应的task");
 		
 		var oo = msgpack.unpack( new Buffer(task.callback_param) );
-	  console.log('%s %s is a %s.  %s', task.time, task.desc, task.callback_url, oo.from ) // Space Ghost is a talk show host.
+	  // console.log('%s %s is a %s.  %s', task.time, task.desc, task.callback_url, oo.from ) // Space Ghost is a talk show host.
 		// TODO: 此时应使用post方法完成
 		
-		// request('http://www.google.com', function (error, response, body) {
-// 		  if (!error && response.statusCode == 200) {
-// 		    console.log(body) // Print the google web page.
-// 		  }
-// 		})
-//
+		var url      = task.callback_url;
+		var formData = eval('formData='+task.callback_param);
+		
+		console.log("task callback地址：" + url + '?param=' + task.callback_param);
+		request.post({url:url, formData: formData}, function optionalCallback(err, httpResponse, body) {
+		  if (err) {
+		    console.error('upload failed:', err);
+				console.log("task callback发出请求失败！！！！");
+				return 
+		  }
+			console.log("task callback已成功发出请求");
+		  console.log('Upload successful!  Server responded with:', body);
+		});
+		
+		
 		res.json({
 		  data:task,
 		  status:{
