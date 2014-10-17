@@ -2,10 +2,32 @@ var express = require('express');
 var router = express.Router();
 var msgpack = require('msgpack');
 var request = require('request');
+var moment = require('moment');
 
 // var b = msgpack.pack(o);
 // var oo = msgpack.unpack(b);
 
+var getOffDays = function(startDate, endDate) {    
+	var mmSec = (endDate.getTime() - startDate.getTime()); //得到时间戳相减 得到以毫秒为单位的差    
+	return (mmSec); //毫秒
+};    
+
+Date.prototype.Format = function (fmt) { //author: meizz 
+	var o = {
+	    "M+": this.getMonth() + 1, //月份 
+	    "d+": this.getDate(), //日 
+	    "h+": this.getHours(), //小时 
+	    "m+": this.getMinutes(), //分 
+	    "s+": this.getSeconds(), //秒 
+	    "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+	    "S": this.getMilliseconds() //毫秒 
+	};
+	if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	for (var k in o)
+	if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	return fmt;
+}
+	
 /* GET token create. */
 router.post('/', function(req, res) {
 	var db = req.db;
@@ -15,6 +37,17 @@ router.post('/', function(req, res) {
 	console.log(req.body);
 	console.log(req.query);
 	
+	
+	var   s   =  req.body.time;    
+	var startDate  =   new   Date(Date.parse(s.replace(/-/g,   "/")));   
+	console.log(startDate)
+	
+	// var startDate = moment("2014-10-17 20:30:00",       "YYYY-MM-DD HH:mm:ss");
+	
+	var now = new Date();
+	
+	var mmsec = - getOffDays(startDate,now);
+	console.log('mmsec='+mmsec);
 	//
 	// - _id
 	// - time
@@ -22,7 +55,7 @@ router.post('/', function(req, res) {
 	// - callback_url
 	// - is_finished
 	// - create_at
-	var time		 					= req.body.time;
+	var time		 					= mmsec;
 	var desc							= req.body.desc;
 	var callback_url 			= req.body.callback_url;
 	var is_finished 			= 0;
@@ -32,18 +65,19 @@ router.post('/', function(req, res) {
 		is_finished = req.body.is_finished;
 	}
 	//
-	var str = msgpack.pack(callback_param)
 	
-	console.log(callback_param + 'str = '+ str)
-		
+	var callback_param_base64 = callback_param;
+	
 	var new_task = new model.TaskModel({
 		time				: time ,
 		desc				: desc,
 		callback_url: callback_url,
 		is_finished : is_finished,
 		is_stop 		: 0,
-		callback_param: callback_param
+		callback_param: callback_param_base64
 	});
+	
+	console.log('callback_param_base64= ' + callback_param_base64)
 
 	new_task.save(function (err, new_task) {
 	  if (err) return console.error(err);
@@ -108,15 +142,26 @@ router.get('/:id/request/send', function(req, res) {
 		
 		console.log("已经找到对应的task");
 		
-		var oo = msgpack.unpack( new Buffer(task.callback_param) );
-	  // console.log('%s %s is a %s.  %s', task.time, task.desc, task.callback_url, oo.from ) // Space Ghost is a talk show host.
+ 
 		// TODO: 此时应使用post方法完成
 		
-		var url      = task.callback_url;
-		var formData = eval('formData='+task.callback_param);
+		var url      = task.callback_url; 
 		
 		console.log("task callback地址：" + url + '?param=' + task.callback_param);
-		request.post({url:url, formData: formData}, function optionalCallback(err, httpResponse, body) {
+		//"
+		var d = { 	token:'B1504D99F0C0DB8048709EC58BACD4A1054CB331C57627A042E72CE1DFC6873F', 	alert:'这是我的消息,你妹啊1211221', 	payload:{     "status": {         "dfsdsf": 0,         "msg": "success"     } }, 	badge:'1' }
+		console.log('JSON.stringify(d)='+JSON.stringify(d))
+		var a = new Buffer(JSON.stringify(d)).toString('base64');
+		var z = JSON.parse(new Buffer( task.callback_param, 'base64').toString())
+		
+		console.log('z=' + z);
+		
+		// var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
+		eval("{'"+ z + "'}");
+		// a= eyJ0b2tlbiI6IkIxNTA0RDk5RjBDMERCODA0ODcwOUVDNThCQUNENEExMDU0Q0IzMzFDNTc2MjdBMDQyRTcyQ0UxREZDNjg3M0YiLCJhbGVydCI6Iui/meaYr+aIkeeahOa2iOaBryzkvaDlprnllYoxMjExMjIxIiwicGF5bG9hZCI6eyJzdGF0dXMiOnsiZGZzZHNmIjowLCJtc2ciOiJzdWNjZXNzIn19LCJiYWRnZSI6IjEifQ==
+		console.log('XXXXXX =' + z.token);
+		
+		request.post({url:url, form: z}, function optionalCallback(err, httpResponse, body) {
 		  if (err) {
 		    console.error('upload failed:', err);
 				console.log("task callback发出请求失败！！！！");
