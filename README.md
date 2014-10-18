@@ -3,9 +3,9 @@ QBaseCron
 
 ## tech stack
 
-- express 
-- redis
-
+- express（API）
+- redis（任务调度）
+- mongodb（存储任务）
 
 ## features
 
