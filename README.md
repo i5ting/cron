@@ -70,6 +70,7 @@ https://github.com/bunkat/later
 ## token
 
 
+http://42.62.8.172:3453/api/v0.1.0/push
 
 ### 定时推送		
 http://127.0.0.1:3452/api/v0.1.0/tasks
@@ -100,7 +101,7 @@ data是对象，转成string，然后base64获得的。具体算法如下：
 ### 实时推送
 
 
-http://127.0.0.1:3000/api/v0.1.0/push
+http://127.0.0.1:3453/api/v0.1.0/push
 
 x-www-form-urlencoded
 
