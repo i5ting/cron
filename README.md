@@ -1,6 +1,10 @@
 QBaseCron
 =========
 
+
+http使用3452端口
+
+
 ## tech stack
 
 - express（API）
@@ -68,7 +72,7 @@ https://github.com/bunkat/later
 
 
 ### 定时推送		
-http://127.0.0.1:7000/api/v0.1.0/tasks
+http://127.0.0.1:3452/api/v0.1.0/tasks
 
 post
 
@@ -78,7 +82,7 @@ x-www-form-urlencoded
 
 - time = 2014-10-17 20:43:44
 - desc = desc
-- callback_url = http://127.0.0.1:3000/api/v0.1.0/push/api
+- callback_url = http://127.0.0.1:3453/api/v0.1.0/push/api
 - data = eyJ0b2tlbiI6IkIxNTA0RDk5RjBDMERCODA0ODcwOUVDNThCQUNENEExMDU0Q0IzMzFDNTc2MjdBMDQyRTcyQ0UxREZDNjg3M0YiLCJhbGVydCI6Iui
 
 说明：

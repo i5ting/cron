@@ -13,7 +13,7 @@ subscriberClient.on("pmessage", function (pattern, channel, expiredKey) {
     console.log("Task triggerd : key ["+  expiredKey +"] has expired");
     //TODO: push expiredKey onto some other list to proceed to order fulfillment
 
-		var url = "http://127.0.0.1:7000/api/v0.1.0/tasks/" + expiredKey + "/request/send" 
+		var url = "http://127.0.0.1:3452/api/v0.1.0/tasks/" + expiredKey + "/request/send" 
 		console.log(url);
 		
 		//TODO: 此处可以改成事件方式
