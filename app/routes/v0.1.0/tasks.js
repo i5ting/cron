@@ -33,6 +33,7 @@ router.post('/', function(req, res) {
 	var db = req.db;
 	var model = req.model
 	var scheduleManager = req.scheduleManager
+	var Config = req.config;
 	
 	console.log(req.body);
 	console.log(req.query);
@@ -57,7 +58,7 @@ router.post('/', function(req, res) {
 	// - create_at
 	var time		 					= mmsec;
 	var desc							= req.body.desc;
-	var callback_url 			= req.body.callback_url;
+	var callback_url 			= Config.PUSH_SERVER_URL;
 	var is_finished 			= 0;
 	var callback_param		= req.body.data;
 	
