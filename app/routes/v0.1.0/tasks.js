@@ -35,7 +35,7 @@ router.post('/', function(req, res) {
 	var scheduleManager = req.scheduleManager
 	var Config = req.config;
 	
-	console.log(req.body);
+	console.log('config.PUSH_SERVER_URL='+req.config.PUSH_SERVER_URL);
 	console.log(req.query);
 	
 	
@@ -49,6 +49,15 @@ router.post('/', function(req, res) {
 	
 	var mmsec = - getOffDays(startDate,now);
 	console.log('mmsec='+mmsec);
+	
+	if (mmsec < 0){
+	 res.status(200).json({
+		 status:{
+			 code: 10001,
+			 msg : 'error,指定的时间不正确，比当前时间少，或者服务器时间设置不正确'
+		 }
+	 });
+	}
 	//
 	// - _id
 	// - time
@@ -84,7 +93,7 @@ router.post('/', function(req, res) {
 	  if (err) return console.error(err);
 
 		 scheduleManager.addTask(new_task._id,new_task.time,new_task.callback_url);
-		 console.log('[TASK QUEUE LOG] add task in queue');
+		 console.log('[TASK QUEUE LOG] add task in queue,if timeout no response,please checkout redis start way');
 		 
 		 res.status(200).json({
 		 	 data:new_task,

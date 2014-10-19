@@ -20,6 +20,8 @@ subscriberClient.on("pmessage", function (pattern, channel, expiredKey) {
 		request(url, function (error, response, body) {
 		  if (!error && response.statusCode == 200) {
 		    console.log(expiredKey + '---' + url + "发送请求成功" + body) // Print the google web page.
+		  }else{
+		  	console.log(expiredKey + '---' + url + "发送请求失败" + body) // Print the google web page.
 		  }
 		})
     // subscriberClient.quit();

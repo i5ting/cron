@@ -1,6 +1,24 @@
 QBaseCron
 =========
 
+## 运行
+
+### 修改系统设置/app/config.js
+
+- PUSH_SERVER_URL 是推送的url，默认是本机的push服务
+
+### 启动redis
+一定要注意redis启动方式
+
+```
+nohup redis-server  --notify-keyspace-events Ex  --loglevel verbose >./redis-server.log 2>&1 &
+```
+
+### 启动web server
+
+```
+./start.sh
+```
 
 http使用3452端口
 
@@ -10,11 +28,6 @@ http使用3452端口
 - express（API）
 - redis（任务调度）
 - mongodb（存储任务）
-
-## features
-
-
-
 
 ## 原理
 

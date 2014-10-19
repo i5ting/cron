@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
     req.db = mongoose;
 		req.model = require('./db/models');
-		req.config = require('.config');
+		req.config = require('./config');
 		req.scheduleManager = schedule.Manager
     next();
 });
