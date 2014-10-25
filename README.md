@@ -14,6 +14,7 @@ QBaseCron
 nohup redis-server  --notify-keyspace-events Ex  --loglevel verbose >./redis-server.log 2>&1 &
 ```
 
+
 ### 启动web server
 
 ```
@@ -28,6 +29,10 @@ http使用3452端口
 - express（API）
 - redis（任务调度）
 - mongodb（存储任务）
+
+## 优化
+
+cron triggered：use queue
 
 ## 原理
 
@@ -111,6 +116,13 @@ data是对象，转成string，然后base64获得的。具体算法如下：
 		// a= eyJ0b2tlbiI6IkIxNTA0RDk5RjBDMERCODA0ODcwOUVDNThCQUNENEExMDU0Q0IzMzFDNTc2MjdBMDQyRTcyQ0UxREZDNjg3M0YiLCJhbGVydCI6Iui/meaYr+aIkeeahOa2iOaBryzkvaDlprnllYoxMjExMjIxIiwicGF5bG9hZCI6eyJzdGF0dXMiOnsiZGZzZHNmIjowLCJtc2ciOiJzdWNjZXNzIn19LCJiYWRnZSI6IjEifQ==
 ```
 
+
+test with curl
+
+```
+curl -d "time=2014-10-25 16:32:59&desc=sfsfd&callback_url=http://127.0.0.1:3453/api/v0.1.0/push/api&data=eyJ0b2tlbiI6IkIxNTA0RDk5RjBDMERCODA0ODcwOUVDNThCQUNENEExMDU0Q0IzMzFDNTc2MjdBMDQyRTcyQ0UxREZDNjg3M0YiLCJhbGVydCI6Iui" 
+```
+
 ### 实时推送
 
 
@@ -124,6 +136,5 @@ x-www-form-urlencoded
 - alert = 这是我的消息,你妹啊1211221
 - payload = {     "status": {         "dfsdsf": 0,         "msg": "success"     } }
 - badge = 0
-
 
 
