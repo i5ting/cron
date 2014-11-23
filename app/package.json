@@ -6,7 +6,9 @@
     "start": "npm run product",
     "product": "sudo pm2 start bin/www -f -x -i max --name push",
     "dev": "./node_modules/.bin/supervisor ./bin/www",
-    "test": "./node_modules/.bin/mocha -u tdd"
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot",
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter dot"
   },
   "dependencies": {
     "body-parser": "~1.8.1",
@@ -25,9 +27,10 @@
     "serve-favicon": "^2.1.5"
   },
   "devDependencies": {
+    "chai": "^1.9.2",
+    "istanbul": "^0.3.2",
     "mocha": "^1.21.5",
-		"chai": "^1.9.2",
-		"sinon": "^1.10.3",
-		"supervisor": "^0.6.0"
+    "sinon": "^1.10.3",
+    "supervisor": "^0.6.0"
   }
 }
