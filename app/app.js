@@ -8,10 +8,6 @@ var model = require('./db/models');
 
 var schedule = require('./utils/schedule');
 
-
-
-var stackman = require('stackman')();
-
 var app = express();
 
 // mongoose config
