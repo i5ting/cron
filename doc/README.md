@@ -14,7 +14,7 @@ You might want to check out [Later.js](https://github.com/bunkat/later) which ca
 var schedule = cronParser().parse('* */5 * * * *', true);
 var results = later(60).get(schedule, 100, startDate, endDate);
 
-http://blog.fens.me/tag/cron/
+http://blog.fens.me/nodejs-cron-later/
 
 ## cronner
  
